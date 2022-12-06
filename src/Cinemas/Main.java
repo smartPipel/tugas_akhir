@@ -98,7 +98,7 @@ public class Main {
         System.out.printf("%5s %15s %20s\n", "No", "Film", "Stok tiket");
         System.out.println("----------------------------------------------");
         for (int i = 0; i < movies.length; i++) {
-            System.out.format("%5d %20s %15s \n", (i+1),  movies[i][0]  ,movies[i][1]);
+            System.out.format("%5d %20s %15s \n", (i+1),  movies[i][0]  ,Integer.parseInt(movies[i][1]) == 0  ? "Tiket habis" : movies[i][1]);
             System.out.println();
         }
         System.out.println("----------------------------------------------");
@@ -108,26 +108,49 @@ public class Main {
     public static void chooseMovie(){
         System.out.println("Pilih salah satu film yang ingin anda tonton diatas!");
         int pilihan = scanner.nextInt();
-        chosenMovie(pilihan-1);
+
+        if (pilihan > 4){
+            System.out.println("Pilih salah satu angka diatas");
+            chooseMovie();
+        }
+
+
         System.out.println("Berapa kusrsi yang anda pesan?");
         int kursi = scanner.nextInt();
+
+        if (Integer.parseInt(movies[pilihan-1][1]) == 0){
+            System.out.println("Ticket habis");
+        }
+
+        if (Integer.parseInt(movies[pilihan-1][1]) < kursi){
+
+            System.out.println("Stok tiket tidak mencukupi");
+            chooseMovie();
+        }
+
         checkoutTicket(pilihan -1, kursi );
-        System.out.println("Pilih studio!");
+        System.out.print("Pilih studio!");
         System.out.format("\n1. Deluxe: %s \n2. Imax: %s \n3. Premiere: %s", numberFormat.format(DELUXE_PRICE), numberFormat.format(IMAX_PRICE), numberFormat.format(PREMIERE_PRICE));
         System.out.println();
         int studio = scanner.nextInt();
-        approveTransaction(priceSum(studio, kursi));
+        approveTransaction(priceSum(studio, kursi), pilihan-1);
 
     }
 
-    public static void approveTransaction(int nominalTotal){
+    public static void approveTransaction(int nominalTotal, int index){
         System.out.println("Apakah anda setuju dengan transaksi dan ingin melanjutkan?");
         System.out.println("1. Ya \n2. Tidak");
         int pilihan = scanner.nextInt();
 
         switch (pilihan){
-            case 1:
+            case 1:{
+                System.out.println("-------------------------------");
+                System.out.println("Film pilihan: "+movies[index][0]);
+                System.out.println("-------------------------------");
                 System.out.println("Total transaksi: "+ numberFormat.format(nominalTotal));
+                System.out.println("-------------------------------");
+                System.out.println("\n\n");
+            }
             case 2:
                 mainMenu();
             default: {
@@ -138,6 +161,9 @@ public class Main {
     }
 
     public static int priceSum(int studioPilihan, int kursi){
+        if (studioPilihan < 3){
+            inputErrorMsg();
+        }
         switch (studioPilihan){
             case 1:
                 return 40000*kursi;
@@ -152,7 +178,7 @@ public class Main {
     }
 
     public static void chosenMovie(int index){
-        System.out.println(movies[index][0]);
+        System.out.println("Film pilihan: "+movies[index][0]);
     }
 
     public static void exit(){
@@ -161,21 +187,24 @@ public class Main {
     }
 
     public static void inputErrorMsg(){
-        System.out.println("Mohon masukkan pilihan angka diatas");
+        System.out.println("Mohon masukkan pilihan angka diatas!");
         System.out.println();
     }
 
+//checkout item by reduce the ticket quantity
     public static void checkoutTicket(int index, int quantity){
         int ticketQuantity = Integer.parseInt(movies[index][1]);
         int result = ticketQuantity - quantity;
+//       example result:  10 - 1 -> 9
         pushNewTicketQuantity(index, result);
     }
 
+//    push new ticket quantity to movies array
     public static void pushNewTicketQuantity(int index, int quantity){
         String qty = String.valueOf(quantity);
         movies[index][1] = qty;
 
-        System.out.println(movies[index][1]);
+//        System.out.println(movies[index][1]);
     }
 
 
