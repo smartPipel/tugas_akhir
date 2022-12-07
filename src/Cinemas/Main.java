@@ -12,7 +12,6 @@ public class Main {
     public static int DELUXE_PRICE = 40000;
     public static int IMAX_PRICE = 70000;
     public static int PREMIERE_PRICE = 100000;
-
     public static String[][] movies = {
             {"Black Panther", "100"},
             {"Gundala","10"},
@@ -20,9 +19,10 @@ public class Main {
             {"Kimi no Nawa", "100"}
     };
     public static Scanner scanner = new Scanner(System.in);
-
     public static NumberFormat numberFormat= NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-//    Main method
+
+
+    //    Main method
     public static void main(String[] args) {
         mainPage();
     }
@@ -79,9 +79,11 @@ public class Main {
     }
 
     static void auth(String username, String password){
-//        check if the params is null
+
+        //check if the params is null
         if (username != null && password!= null){
-//            validate the username and password with the default value
+
+            //validate the username and password with the default value
             if (username.equals(DEFAULT_USERNAME) && password.equals(DEFAULT_PASSWORD)){
                 System.out.println("Berhasil login!");
                 mainMenu();
@@ -150,9 +152,11 @@ public class Main {
                 System.out.println("Total transaksi: "+ numberFormat.format(nominalTotal));
                 System.out.println("-------------------------------");
                 System.out.println("\n\n");
-            }
-            case 2:
                 mainMenu();
+            }
+            break;
+            case 2: mainMenu();
+            break;
             default: {
                 inputErrorMsg();
                 mainMenu();
@@ -191,20 +195,21 @@ public class Main {
         System.out.println();
     }
 
-//checkout item by reduce the ticket quantity
+
+    //checkout item by reduce the ticket quantity
     public static void checkoutTicket(int index, int quantity){
         int ticketQuantity = Integer.parseInt(movies[index][1]);
         int result = ticketQuantity - quantity;
-//       example result:  10 - 1 -> 9
+        //example result:  10 - 1 -> 9
+
         pushNewTicketQuantity(index, result);
     }
 
-//    push new ticket quantity to movies array
+    //push new ticket quantity to movies array
     public static void pushNewTicketQuantity(int index, int quantity){
         String qty = String.valueOf(quantity);
         movies[index][1] = qty;
 
-//        System.out.println(movies[index][1]);
     }
 
 
